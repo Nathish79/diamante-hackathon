@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard - Healthcare Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .dashboard-section {
+            margin-top: 20px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Healthcare Management</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#upload-record">Upload Records</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#manage-permissions">Manage Permissions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#access-logs">Access Logs</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <header class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">Patient Dashboard</h1>
+            <p class="lead text-muted">Manage your health data, control access permissions, and view access logs.</p>
+        </div>
+    </header>
+    <section id="upload-record" class="container dashboard-section">
+        <h2>Upload Health Records</h2>
+        <form id="uploadForm">
+            <div class="form-group">
+                <label for="recordName">Patient Name:</label>
+                <input type="text" class="form-control" id="recordName" placeholder="Enter patient name" required>
+            </div>
+            <div class="form-group">
+                <label for="recordAge">Patient Age:</label>
+                <input type="number" class="form-control" id="recordAge" placeholder="Enter patient age" required>
+            </div>
+            <div class="form-group">
+                <label for="recordHistory">Medical History:</label>
+                <textarea class="form-control" id="recordHistory" placeholder="Enter medical history" required></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </div>
+        </form>
+    </section>
+    <section id="manage-permissions" class="container dashboard-section">
+        <h2>Manage Permissions</h2>
+        <form id="permissionForm">
+            <div class="form-group">
+                <label for="providerAddress">Healthcare Provider Address:</label>
+                <input type="text" class="form-control" id="providerAddress" placeholder="Enter provider address" required>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="grantAccess()">Grant Access</button>
+                <button type="button" class="btn btn-secondary" onclick="revokeAccess()">Revoke Access</button>
+            </div>
+        </form>
+    </section>
+    <section id="access-logs" class="container dashboard-section">
+        <h2>Access Logs</h2>
+        <div class="card">
+            <div class="card-body">
+                <p class="card-text">No access logs available. Once you start sharing your data, logs will appear here.</p>
+            </div>
+        </div>
+    </section>
+    <footer class="text-center text-white bg-dark mt-5 p-4">
+        <p>Healthcare Management</p>
+        <p>Email: healthcare@gmail.com | Phone: +91 9876543210</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const recordName = document.getElementById('recordName').value;
+            const recordAge = document.getElementById('recordAge').value;
+            const recordHistory = document.getElementById('recordHistory').value.split(',');
+
+            const formData = {
+                name: recordName,
+                age: recordAge,
+                medicalHistory: recordHistory
+            };
+
+            fetch('http://localhost:3000/records', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.text())
+            .then(result => {
+                alert(result);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to upload record.');
+            });
+        });
+    </script>
+</body>
+
+</html>
